@@ -1,0 +1,87 @@
+INT A = 10;
+INT B = 4;
+INT C;
+
+HELLO$ = "Hello";
+WORLD$ = "World!";
+DIGITS$ = "IVXLCDM";
+
+PRINT "Testing arithmetic:", A;
+PRINT " B=", B;
+PRINT "\n";
+
+C = A + B;
+PRINT "A+B=", C;
+PRINT "\n";
+
+C = A - B;
+PRINT "A-B=", C;
+PRINT "\n";
+
+C = A * B;
+PRINT "A*B=", C;
+PRINT "\n";
+
+C = A / B;
+PRINT "A/B=", C;
+PRINT "\n";
+
+C = A MOD B;
+PRINT "A MOD B=", C;
+PRINT "\n";
+PRINT "--------------------------------";
+PRINT "\n";
+
+PRINT "Testing strings:";
+PRINT "\n";
+
+PRINT HELLO$;
+
+PRINT WORLD$;
+PRINT "\n";
+FULL$ = HELLO$ + " " + WORLD$;
+PRINT "Concatenated: ", FULL$;
+PRINT "\n";
+
+PRINT "--------------------------------";
+
+PRINT "Testing MID$:";
+PRINT "\n";
+MID1$ = MID$(1, 0, 1);
+PRINT "MID$(1,0,1): ", MID1$;
+
+MID2$ = MID$(2, 2, 3);
+PRINT "MID$(2,2,3): ", MID2$;
+
+MID3$ = MID$(3, 6, 5);
+PRINT "MID$(3,6,5): ", MID3$;
+
+PRINT "--------------------------------";
+
+PRINT "Testing SELECT CASE:";
+
+INT CHOICE = 2;
+
+SELECT CHOICE
+    CASE 1:
+        PRINT "Choice was 1";
+    CASE 2,3:
+        PRINT "Choice was 2 or 3";
+    DEFAULT:
+        PRINT "Default branch";
+ENDSELECT;
+
+PRINT "--------------------------------";
+
+PRINT "Testing INPUT:";
+
+INT NUM;
+INPUT "Enter a number:", NUM;
+
+INT LAST;
+LAST = NUM MOD 10;
+
+PRINT "Last digit is: ", LAST;
+
+PRINT "--------------------------------";
+PRINT "Done!";

@@ -1,0 +1,20 @@
+CC = gcc
+FLEX = flex
+BISON = bison
+
+all: minic
+
+minic: parser.tab.c lex.yy.c main.o
+	$(CC) parser.tab.c lex.yy.c main.o -o minic
+
+parser.tab.c parser.tab.h: parser.y
+	$(BISON) -d parser.y
+
+lex.yy.c: scanner.l parser.tab.h
+	$(FLEX) scanner.l
+
+main.o: main.c
+	$(CC) -c main.c
+
+clean:
+	rm -f minic parser.tab.c parser.tab.h lex.yy.c *.o
