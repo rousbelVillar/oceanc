@@ -1,20 +1,18 @@
-CC = gcc
-FLEX = flex
-BISON = bison
+mini: parser.tab.c lex.yy.c ast.o main.o
+	gcc -Wall -Wextra -g -o mini parser.tab.c lex.yy.c ast.o main.o
 
-all: minic
+parser.tab.c: parser.y
+	bison -d parser.y
 
-minic: parser.tab.c lex.yy.c main.o
-	$(CC) parser.tab.c lex.yy.c main.o -o minic
+lex.yy.c: scanner.l
+	flex scanner.l
 
-parser.tab.c parser.tab.h: parser.y
-	$(BISON) -d parser.y
+ast.o: ast.c ast.h
+	gcc -c ast.c
 
-lex.yy.c: scanner.l parser.tab.h
-	$(FLEX) scanner.l
-
-main.o: main.c
-	$(CC) -c main.c
+main.o: main.c ast.h
+	gcc -c main.c
 
 clean:
-	rm -f minic parser.tab.c parser.tab.h lex.yy.c *.o
+	rm -f *.o mini parser.tab.* lex.yy.c
+

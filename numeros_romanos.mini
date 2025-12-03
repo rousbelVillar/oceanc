@@ -1,0 +1,40 @@
+print "=== BASIC ARITHMETIC ===";
+var a = 10;
+var b = 3;
+
+print a;
+print b;
+print a + b;
+print a - b;
+print a * b;
+print a / b;
+print a % b;
+
+print "=== VARIABLE REASSIGNMENT ===";
+a = 42;
+print a;
+
+print "=== STRINGS ===";
+var s = "hello";
+print s;
+
+print "=== DO WHILE LOOP ===";
+var x = 5;
+do {
+    print x;
+    x = x - 1;
+} while (x > 0);
+
+print "=== NESTED EXPRESSIONS ===";
+print (10 + 20) * 3;
+
+print "=== LOOP WITH DIVISION ===";
+var y = 100;
+do {
+    print y;
+    y = y / 10;
+} while (y > 0);
+
+print "=== MIXED STRING & NUMBER OUTPUT ===";
+print "value of y:";
+print y;

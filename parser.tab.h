@@ -39,53 +39,63 @@
    /* Put the tokens into the symbol table, so that GDB and other debuggers
       know about them.  */
    enum yytokentype {
-     CONST = 258,
-     INPUT = 259,
+     DO = 258,
+     WHILE = 259,
      PRINT = 260,
-     INTKW = 261,
-     STRINGKW = 262,
-     SELECTKW = 263,
-     CASEKW = 264,
-     DEFAULTKW = 265,
-     ENDSELECTKW = 266,
-     MIDFUNC = 267,
-     MOD = 268,
+     LBRACE = 261,
+     RBRACE = 262,
+     LPAREN = 263,
+     RPAREN = 264,
+     SEMI = 265,
+     ASSIGN = 266,
+     PLUS = 267,
+     MINUS = 268,
      NUMBER = 269,
-     STRING = 270,
-     ID = 271,
-     IDSTR = 272
+     IDENT = 270,
+     STRINGCONST = 271,
+     LT = 272,
+     GT = 273,
+     VAR = 274,
+     MUL = 275,
+     DIV = 276,
+     MOD = 277
    };
 #endif
 /* Tokens.  */
-#define CONST 258
-#define INPUT 259
+#define DO 258
+#define WHILE 259
 #define PRINT 260
-#define INTKW 261
-#define STRINGKW 262
-#define SELECTKW 263
-#define CASEKW 264
-#define DEFAULTKW 265
-#define ENDSELECTKW 266
-#define MIDFUNC 267
-#define MOD 268
+#define LBRACE 261
+#define RBRACE 262
+#define LPAREN 263
+#define RPAREN 264
+#define SEMI 265
+#define ASSIGN 266
+#define PLUS 267
+#define MINUS 268
 #define NUMBER 269
-#define STRING 270
-#define ID 271
-#define IDSTR 272
+#define IDENT 270
+#define STRINGCONST 271
+#define LT 272
+#define GT 273
+#define VAR 274
+#define MUL 275
+#define DIV 276
+#define MOD 277
 
 
 
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 118 "parser.y"
+#line 15 "parser.y"
 {
-    char* sval;
-    int   ival;
-    ValueList* vlist;
+    int ival;
+    char *sval;
+    ASTNode *node;
 }
 /* Line 1529 of yacc.c.  */
-#line 89 "parser.tab.h"
+#line 99 "parser.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
