@@ -1,86 +1,54 @@
-INT A = 10;
-INT B = 4;
-INT C;
+print "=== BASIC ARITHMETIC ===";
+var a = 10;
+var b = 3;
 
-HELLO$ = "Hello";
-WORLD$ = "World!";
-DIGITS$ = "IVXLCDM";
+print a;
+print b;
+print a + b;
+print a - b;
+print a * b;
+print a / b;
+print a % b;
 
-PRINT "Testing arithmetic:", A;
-PRINT " B=", B;
-PRINT "\n";
+print "=== VARIABLE REASSIGNMENT ===";
+a = 42;
+print a;
 
-C = A + B;
-PRINT "A+B=", C;
-PRINT "\n";
+print "=== STRINGS ===";
+var s = "hello";
+print s;
 
-C = A - B;
-PRINT "A-B=", C;
-PRINT "\n";
+print "=== DO WHILE LOOP ===";
+var x = 5;
+do {
+    print x;
+    x = x - 1;
+} while (x > 0);
 
-C = A * B;
-PRINT "A*B=", C;
-PRINT "\n";
+print "=== NESTED EXPRESSIONS ===";
+print 10 + 20 * 3;
 
-C = A / B;
-PRINT "A/B=", C;
-PRINT "\n";
+print "=== LOOP WITH DIVISION ===";
+var y = 100;
+do {
+    print y;
+    y = y / 10;
+} while (y > 0);
 
-C = A MOD B;
-PRINT "A MOD B=", C;
-PRINT "\n";
-PRINT "--------------------------------";
-PRINT "\n";
+print "=== MIXED STRING & NUMBER OUTPUT ===";
+print "value of y:";
+print y;
 
-PRINT "Testing strings:";
-PRINT "\n";
+print "hello " + "world";
 
-PRINT HELLO$;
+var name = "Carlos";
+print "Hello, " + name;
 
-PRINT WORLD$;
-PRINT "\n";
-FULL$ = HELLO$ + " " + WORLD$;
-PRINT "Concatenated: ", FULL$;
-PRINT "\n";
+print "age: " + 30;
 
-PRINT "--------------------------------";
+print "total: " + (20 + 5);
 
-PRINT "Testing MID$:";
-PRINT "\n";
-MID1$ = MID$("ABC", 0 , 1);
-PRINT "Mid", MID1$;
-
-
-
-PRINT "--------------------------------";
-
-PRINT "Testing SELECT CASE:\n";
-
-INT CHOICE = 2;
-
-SELECT CHOICE
-    CASE 1:
-        PRINT "Choice was 1";
-    CASE 2:
-        PRINT "Choice was 2";
-    CASE 3:
-        PRINT "Choice was 3";
-    DEFAULT:
-        PRINT "Default branch";
-ENDSELECT;
-
-PRINT "\n";
-PRINT "--------------------------------";
-
-PRINT "Testing INPUT:";
-
-INT NUM;
-INPUT "Enter a number:", NUM;
-
-INT LAST;
-LAST = NUM MOD 10;
-
-PRINT "Last digit is: ", LAST;
-
-PRINT "--------------------------------";
-PRINT "Done!";
+var x = 10;
+var y = " cats";
+print x + y;
+print y + x;

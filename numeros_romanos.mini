@@ -26,7 +26,7 @@ do {
 } while (x > 0);
 
 print "=== NESTED EXPRESSIONS ===";
-print (10 + 20) * 3;
+print 10 + 20 * 3;
 
 print "=== LOOP WITH DIVISION ===";
 var y = 100;
@@ -38,3 +38,21 @@ do {
 print "=== MIXED STRING & NUMBER OUTPUT ===";
 print "value of y:";
 print y;
+
+print "=== CONCATENATION ===";
+
+print "hello " + "world";
+
+var x = "foo";
+print x + 12;
+
+print ( "a" + "b" ) + "c";
+
+print "=== CONSTANTS ===";
+
+constant_var = "constant variable";
+print constant_var;
+
+print "=== MID FUNCTION ===";
+var mid_result = mid("abcdef", 0, 3);
+print mid_result;

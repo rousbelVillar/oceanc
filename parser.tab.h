@@ -58,7 +58,12 @@
      VAR = 274,
      MUL = 275,
      DIV = 276,
-     MOD = 277
+     MOD = 277,
+     CONST = 278,
+     COMMA = 279,
+     ID = 280,
+     STRING_LITERAL = 281,
+     INT_LITERAL = 282
    };
 #endif
 /* Tokens.  */
@@ -82,6 +87,11 @@
 #define MUL 275
 #define DIV 276
 #define MOD 277
+#define CONST 278
+#define COMMA 279
+#define ID 280
+#define STRING_LITERAL 281
+#define INT_LITERAL 282
 
 
 
@@ -95,7 +105,7 @@ typedef union YYSTYPE
     ASTNode *node;
 }
 /* Line 1529 of yacc.c.  */
-#line 99 "parser.tab.h"
+#line 109 "parser.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

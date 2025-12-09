@@ -1,5 +1,13 @@
+#include <stdint.h>
 #ifndef AST_H
 #define AST_H
+#define IS_STRING_NODE(n) ((n)->type == NODE_STRING)
+typedef struct Value {
+    enum {VAL_INT, VAL_STRING} type;
+    int is_str;
+    long num;
+    char *str;
+} Value;
 
 typedef enum {
     NODE_NUMBER,
@@ -10,13 +18,15 @@ typedef enum {
     NODE_PRINT,
     NODE_BLOCK,
     NODE_DOWHILE,
-    NODE_VARDECL
+    NODE_VARDECL,
+    NODE_CONSTDECL,
+    NODE_FUNCALL
 } NodeType;
 
 
 typedef struct ASTNode {
     NodeType type;
-    int ival;
+    intptr_t ival;
     char *sval;
     struct ASTNode *left;
     struct ASTNode *right;
@@ -32,12 +42,12 @@ ASTNode *make_print(ASTNode *expr);
 ASTNode *make_dowhile(ASTNode *body, ASTNode *cond);
 ASTNode *make_vardecl(char *name, ASTNode *expr);
 ASTNode *make_string(char *s);
+ASTNode *make_constdecl(char *name, ASTNode *expr);
+ASTNode *make_funcall(char *name, ASTNode *arg1, ASTNode *arg2, ASTNode *arg3);
 
 
-
-
-/* Interpreter functions */
-int eval(ASTNode *n);
+Value eval(ASTNode *n);
 void exec(ASTNode *n);
+
 
 #endif

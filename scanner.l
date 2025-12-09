@@ -10,6 +10,8 @@
 "do"                { return DO; }
 "while"             { return WHILE; }
 "print"             { return PRINT; }
+"const"             { return CONST; }
+
 
 "{"                 { return LBRACE; }
 "}"                 { return RBRACE; }
@@ -25,6 +27,8 @@
 "*"                 { return MUL; }
 "/"                 { return DIV; }
 "%"                 { return MOD; }
+","                 { return COMMA; }
+
 
 
 
@@ -32,11 +36,18 @@
 
 [0-9]+              { yylval.ival = atoi(yytext); return NUMBER; }
 [a-zA-Z_][a-zA-Z0-9_]* { yylval.sval = strdup(yytext); return IDENT; }
-\"([^\\\"]|\\.)*\"    {
-                        yylval.sval = strdup(yytext + 1);
-                        yylval.sval[strlen(yylval.sval) - 1] = 0;
-                        return STRINGCONST;
-                      }
+\"([^\\\"]|\\.)*\"  {
+    int len = yyleng;
+
+    /* remove surrounding quotes safely */
+    char *s = malloc(len - 1);
+    memcpy(s, yytext + 1, len - 2);
+    s[len - 2] = '\0';
+
+    yylval.sval = s;
+    return STRINGCONST;
+}
+
 
 
 

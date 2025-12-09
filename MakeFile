@@ -1,18 +1,22 @@
-mini: parser.tab.c lex.yy.c ast.o main.o
-	gcc -Wall -Wextra -g -o mini parser.tab.c lex.yy.c ast.o main.o
+CC = gcc
+CFLAGS = -Wall -Wextra -g
 
-parser.tab.c: parser.y
+all: mini
+
+mini: parser.tab.c lex.yy.c ast.o main.o
+	$(CC) $(CFLAGS) -o mini parser.tab.c lex.yy.c ast.o main.o
+
+parser.tab.c parser.tab.h: parser.y
 	bison -d parser.y
 
-lex.yy.c: scanner.l
+lex.yy.c: scanner.l parser.tab.h
 	flex scanner.l
 
 ast.o: ast.c ast.h
-	gcc -c ast.c
+	$(CC) $(CFLAGS) -c ast.c
 
-main.o: main.c ast.h
-	gcc -c main.c
+main.o: main.c ast.h parser.tab.h
+	$(CC) $(CFLAGS) -c main.c
 
 clean:
-	rm -f *.o mini parser.tab.* lex.yy.c
-
+	rm -f mini *.o parser.tab.c parser.tab.h lex.yy.c
