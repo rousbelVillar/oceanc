@@ -34,7 +34,7 @@ make --version
 ###  Compilar manualmente
 Asegúrate de tener instalado **gcc**, **flex** y **bison**.
 
-```bash
+## En la linea de comandos
 flex scanner.l
 bison -d parser.y
 gcc -o mini main.c ast.c parser.tab.c lex.yy.c
