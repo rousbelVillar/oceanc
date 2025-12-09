@@ -11,6 +11,10 @@
 "while"             { return WHILE; }
 "print"             { return PRINT; }
 "const"             { return CONST; }
+"select"            { return SELECT; }
+"case"              { return CASE; }
+"default"           { return DEFAULT; }
+"endselect"         { return ENDSELECT; }
 
 
 "{"                 { return LBRACE; }
@@ -28,10 +32,7 @@
 "/"                 { return DIV; }
 "%"                 { return MOD; }
 ","                 { return COMMA; }
-
-
-
-
+":"                 { return COLON; }
 
 
 [0-9]+              { yylval.ival = atoi(yytext); return NUMBER; }
@@ -47,9 +48,6 @@
     yylval.sval = s;
     return STRINGCONST;
 }
-
-
-
 
 .                   ;
 

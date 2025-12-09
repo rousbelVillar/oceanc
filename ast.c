@@ -1,10 +1,3 @@
-/* ast.c
-   Complete AST implementation:
-   - constructor functions (make_*)
-   - Value system (string + number)
-   - eval() and exec()
-*/
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -169,14 +162,44 @@ ASTNode *make_constdecl(char *name, ASTNode *expr) {
     n->left = expr;
     return n;
 }
+
 ASTNode *make_funcall(char *name, ASTNode *a1, ASTNode *a2, ASTNode *a3) {
     ASTNode *n = new_node(NODE_FUNCALL);
-    n->sval = strdup(name);   // function name ("mid")
-    n->left = a1;             // first argument
-    n->right = a2;            // second argument
-    n->ival = (intptr_t)a3;   // store third arg somewhere
+    n->sval = strdup(name);
+    n->left = a1;
+    n->right = a2;
+    n->next = a3;
     return n;
 }
+
+
+ASTNode *make_case(ASTNode *match, ASTNode *body, ASTNode *next) {
+    ASTNode *n = malloc(sizeof(ASTNode));
+    n->type = NODE_CASE;
+    n->left  = match;     // value to match
+    n->right = body;      // body inside this case
+    n->next  = next;      // next case in chain
+    return n;
+}
+
+ASTNode *make_default(ASTNode *body) {
+    ASTNode *n = malloc(sizeof(ASTNode));
+    n->type = NODE_DEFAULT;
+    n->left  = NULL;
+    n->right = body;
+    n->next  = NULL;
+    return n;
+}
+
+ASTNode *make_select(ASTNode *expr, ASTNode *cases) {
+    ASTNode *n = new_node(NODE_SELECT);
+    n->left = expr;
+    n->right = cases;
+    return n;
+}
+
+
+
 
 /* ============================================================
    eval()
@@ -198,51 +221,92 @@ Value eval(ASTNode *n) {
     case NODE_VAR:
         return get_var_value(n->sval);
 
+     case NODE_SELECT: {
+        Value sel = eval(n->left);
+        ASTNode *caseptr = n->right;
+        ASTNode *defcase = NULL;
+
+        while (caseptr) {
+            if (caseptr->type == NODE_CASE) {
+                /* evaluate case match expression */
+                Value v = eval(caseptr->left);
+
+                    /* both must be numeric for equality compare */
+                if (!v.is_str && !sel.is_str && (v.num == sel.num)) {
+                    /* execute the chosen case body */
+                    exec(caseptr->right);
+
+                    free_val(&v);
+                    free_val(&sel);
+                    return make_num_val(0);
+                }
+
+                free_val(&v);
+            }
+            else if (caseptr->type == NODE_DEFAULT) {
+            defcase = caseptr;
+            }
+            caseptr = caseptr->next;
+        }
+
+        if (defcase) exec(defcase->right);
+
+        free_val(&sel);
+        return make_num_val(0);
+     }
+
+
     case NODE_FUNCALL: {
-    if (strcmp(n->sval, "mid") == 0) {
+        if (strcmp(n->sval, "mid") == 0) {
 
-        Value s = eval(n->left);
-        Value startV = eval(n->right);
-        ASTNode *a3 = (ASTNode*)n->ival;
-        Value lenV = a3 ? eval(a3) : make_num_val(-1);
+            Value s = eval(n->left);
+            Value startV = eval(n->right);
 
-        if (!s.is_str) {
+            ASTNode *a3 = n->next;
+            Value lenV = a3 ? eval(a3) : make_num_val(-1);
+
+            if (!s.is_str) {
+                free_val(&s);
+                free_val(&startV);
+                free_val(&lenV);
+                return make_str_val_dup("");
+            }
+
+            const char *src = s.str;
+
+            long start;
+            if (startV.is_str) start = atoi(startV.str);
+            else start = startV.num;
+
+            long len;
+            if (lenV.is_str) len = atoi(lenV.str);
+            else len = lenV.num;
+
+            if (start < 0) start = 0;
+            size_t srclen = strlen(src);
+            if (start >= (long)srclen) {
+                free_val(&s); free_val(&startV); free_val(&lenV);
+                return make_str_val_dup("");
+            }
+
+            if (len < 0) len = (long)srclen - start;
+            if (start + len > (long)srclen) len = (long)srclen - start;
+
+            char *out = malloc((size_t)len + 1);
+            if (!out) { perror("malloc"); free_val(&s); free_val(&startV); free_val(&lenV); return make_str_val_dup(""); }
+            memcpy(out, src + start, (size_t)len);
+            out[len] = '\0';
+
             free_val(&s);
             free_val(&startV);
             free_val(&lenV);
-            return make_str_val_dup("");   // mid on non-string yields ""
+
+            return make_str_val_take(out);
         }
-
-        const char *src = s.str;
-        long start = startV.num;  // 0-based
-        long len = lenV.num;
-
-        if (start < 0) start = 0;
-        if (start >= strlen(src)) {
-            free_val(&s); free_val(&startV); free_val(&lenV);
-            return make_str_val_dup("");
-        }
-
-        if (len < 0) len = strlen(src) - start;
-
-        if (start + len > strlen(src))
-            len = strlen(src) - start;
-
-        char *out = malloc(len + 1);
-        memcpy(out, src + start, len);
-        out[len] = 0;
-
-        free_val(&s);
-        free_val(&startV);
-        free_val(&lenV);
-
-        return make_str_val_take(out);
-    }
 
         fprintf(stderr, "Unknown function: %s\n", n->sval);
         return make_num_val(0);
     }
-
 
     case NODE_BINOP: {
         a = eval(n->left);
@@ -319,17 +383,17 @@ void exec(ASTNode *n) {
         return;
     }
 
-  case NODE_PRINT: {
-    Value v = eval(n->left);
+    case NODE_PRINT: {
+        Value v = eval(n->left);
 
-    if (v.is_str)
-        printf("%s\n", v.str);
-    else
-        printf("%ld\n", v.num);
+        if (v.is_str)
+            printf("%s\n", v.str);
+        else
+            printf("%ld\n", v.num);
 
-    free_val(&v);
-    return;
-}
+        free_val(&v);
+        return;
+    }
 
 
 
@@ -359,6 +423,12 @@ void exec(ASTNode *n) {
         set_var_value(n->sval, v);
         return;
     }
+
+     case NODE_SELECT: {
+        eval(n);
+        return;
+    }
+
 
     default:
         fprintf(stderr, "exec: unknown node type %d\n", n->type);

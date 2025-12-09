@@ -20,9 +20,12 @@ typedef enum {
     NODE_DOWHILE,
     NODE_VARDECL,
     NODE_CONSTDECL,
-    NODE_FUNCALL
-} NodeType;
+    NODE_FUNCALL,
+    NODE_SELECT,
+    NODE_CASE,
+    NODE_DEFAULT
 
+} NodeType;
 
 typedef struct ASTNode {
     NodeType type;
@@ -30,7 +33,9 @@ typedef struct ASTNode {
     char *sval;
     struct ASTNode *left;
     struct ASTNode *right;
+    struct ASTNode *next;
 } ASTNode;
+
 
 /* Constructors */
 ASTNode *make_number(int v);
@@ -44,6 +49,10 @@ ASTNode *make_vardecl(char *name, ASTNode *expr);
 ASTNode *make_string(char *s);
 ASTNode *make_constdecl(char *name, ASTNode *expr);
 ASTNode *make_funcall(char *name, ASTNode *arg1, ASTNode *arg2, ASTNode *arg3);
+ASTNode *make_select(ASTNode *expr, ASTNode *cases);
+ASTNode *make_case(ASTNode *match, ASTNode *body, ASTNode *next);
+ASTNode *make_default(ASTNode *body);
+
 
 
 Value eval(ASTNode *n);

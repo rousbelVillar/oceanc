@@ -1,0 +1,102 @@
+print "=== aritmetica ===";
+var a = 10;
+var b = 3;
+
+print a;
+print b;
+print a + b;
+print a - b;
+print a * b;
+print a / b;
+print a % b;
+
+print "=== asignar variables ===";
+a = 42;
+print a;
+
+print "=== string ===";
+var s = "hello";
+print s;
+
+print "=== bucle do while ===";
+var x = 5;
+do {
+    print x;
+    x = x - 1;
+} while (x > 0);
+
+print "=== expresiones combinadas===";
+print 10 + 20 * 3;
+
+print "=== division en bucle ===";
+var y = 100;
+do {
+    print y;
+    y = y / 10;
+} while (y > 0);
+
+print "=== combinando numeros y strings ===";
+print "value of y:";
+print y;
+
+print "=== concatenación ===";
+print "hello " + "world";
+
+var x = "foo";
+print x + 12;
+
+print ( "a" + "b" ) + "c";
+
+print "=== constantes ===";
+constant_var = "constant variable";
+constant_var = "aeiou";
+print constant_var;
+
+print "=== funcion mid ===";
+var mid_test = "abcdefg";
+var mid_result = mid(mid_test, 0, 3);
+print mid_result;
+print mid("aeiou", 0, 3);
+
+print "=== select case ===";
+var z = 2;
+select z {
+    case 1:
+        print "z is one";
+    case 2:
+        print "z is two";
+    case 3:
+        print "z is three";
+    default:
+        print "unknown";
+}
+endselect
+
+print "=== select con string ===";
+var animal = "dog";
+select animal {
+    case "cat":
+        print "cat selected";
+    case "dog":
+        print "dog selected";
+    default:
+        print "other animal";
+}
+endselect
+
+print "=== select con do while ===";
+var c = 3;
+do {
+    select c {
+        case 1:
+            print "c=1";
+        case 2:
+            print "c=2";
+        case 3:
+            print "c=3";
+        default:
+            print "done";
+    }
+    endselect
+    c = c - 1;
+} while (c > 0);

@@ -1,58 +1,36 @@
-print "=== BASIC ARITHMETIC ===";
-var a = 10;
-var b = 3;
+var i = 0;
+var r = 0;
 
-print a;
-print b;
-print a + b;
-print a - b;
-print a * b;
-print a / b;
-print a % b;
+var t = "";
+var s = "IVXLCDM";
 
-print "=== VARIABLE REASSIGNMENT ===";
-a = 42;
-print a;
+var n = 1;
 
-print "=== STRINGS ===";
-var s = "hello";
-print s;
-
-print "=== DO WHILE LOOP ===";
-var x = 5;
 do {
-    print x;
-    x = x - 1;
-} while (x > 0);
+   r = n % 10;
+   n = n / 10;
+   select r {
+        case 1:
+            t = mid(s,i,1) + t;
+        case 2:
+            t = mid(s,i,1) + mid(s,i,1) + t;
+        case 3:
+            t = mid(s,i,1) + mid(s,i,1) + mid(s,i,1) + t;
+        case 4:
+            t = mid(s, i, 2) + t;
+        case 5:
+            t = mid(s, i+1,1) + t;
+        case 6:
+            t = mid(s,i+1,1) + mid(s,i,1) + t;
+        case 7:
+            t = mid(s,i+1,1) + mid(s,i,1) + mid(s,i,1) + t;
+        case 8:
+            t = mid(s,i+1,1) + mid(s,i,1) + mid(s,i,1) + mid(s,i,1) + t;
+        case 9:
+            t = mid(s,i,1) + mid(s,i+2,1) + t;
+   }
+   endselect
+   i = i + 2;
+} while (n > 0);
 
-print "=== NESTED EXPRESSIONS ===";
-print 10 + 20 * 3;
-
-print "=== LOOP WITH DIVISION ===";
-var y = 100;
-do {
-    print y;
-    y = y / 10;
-} while (y > 0);
-
-print "=== MIXED STRING & NUMBER OUTPUT ===";
-print "value of y:";
-print y;
-
-print "=== CONCATENATION ===";
-
-print "hello " + "world";
-
-var x = "foo";
-print x + 12;
-
-print ( "a" + "b" ) + "c";
-
-print "=== CONSTANTS ===";
-
-constant_var = "constant variable";
-print constant_var;
-
-print "=== MID FUNCTION ===";
-var mid_result = mid("abcdef", 0, 3);
-print mid_result;
+print "Numero romano:" + t;
