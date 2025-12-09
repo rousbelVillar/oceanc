@@ -4,7 +4,9 @@ var r = 0;
 var t = "";
 var s = "IVXLCDM";
 
-var n = 1;
+
+print "Ingrese un número en decimal:";
+n = input();
 
 do {
    r = n % 10;

@@ -100,3 +100,9 @@ do {
     endselect
     c = c - 1;
 } while (c > 0);
+
+print "============================ Input =======================";
+var x = 0;
+
+print "El doble es:";
+print x * 2;

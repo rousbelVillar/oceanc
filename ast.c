@@ -6,7 +6,7 @@
 #include "ast.h"
 
 /* ============================================================
-   Value helpers
+   Esta seccion se encarga de majar los valores de las variables
    ============================================================ */
 
 static Value make_num_val(long v) {
@@ -19,7 +19,6 @@ static Value make_str_val_dup(const char *s) {
     return x;
 }
 
-/* take ownership of malloced s */
 static Value make_str_val_take(char *s) {
     Value x; x.is_str = 1; x.num = 0;
     x.str = s ? s : strdup("");
@@ -35,7 +34,7 @@ static void free_val(Value *v) {
 }
 
 /* ============================================================
-   Simple variable store (1-char names)
+   almacenamiento de variables simples
    ============================================================ */
 
 static int   var_defined[256] = {0};
@@ -62,14 +61,14 @@ static void set_var_value(const char *name, Value v) {
 
     unsigned c = (unsigned char)name[0];
 
-    /* block assignment to constants */
+    /* asignamiento de constantes */
     if (var_is_const[c]) {
-        fprintf(stderr, "Error: cannot assign to constant '%c'\n", name[0]);
+        fprintf(stderr, "Error: No se puede asignar la constante '%c'\n", name[0]);
         free_val(&v);
         return;
     }
 
-    /* free old string if present */
+    /* Liberar variables de string */
     if (var_is_str[c] && var_str[c]) {
         free(var_str[c]);
         var_str[c] = NULL;
@@ -84,11 +83,11 @@ static void set_var_value(const char *name, Value v) {
     }
 
     var_defined[c] = 1;
-    free_val(&v); /* consume value */
+    free_val(&v); /* consumir el valor */
 }
 
 /* ============================================================
-   AST Constructors (the missing pieces!)
+   Constructores AST
    ============================================================ */
 
 static ASTNode *new_node(NodeType t) {
@@ -176,9 +175,9 @@ ASTNode *make_funcall(char *name, ASTNode *a1, ASTNode *a2, ASTNode *a3) {
 ASTNode *make_case(ASTNode *match, ASTNode *body, ASTNode *next) {
     ASTNode *n = malloc(sizeof(ASTNode));
     n->type = NODE_CASE;
-    n->left  = match;     // value to match
-    n->right = body;      // body inside this case
-    n->next  = next;      // next case in chain
+    n->left  = match;
+    n->right = body;
+    n->next  = next;
     return n;
 }
 
@@ -228,12 +227,12 @@ Value eval(ASTNode *n) {
 
         while (caseptr) {
             if (caseptr->type == NODE_CASE) {
-                /* evaluate case match expression */
+                /* evaluar case para que coincida con el valor */
                 Value v = eval(caseptr->left);
 
-                    /* both must be numeric for equality compare */
+                    /* igualdad de los valores numericos*/
                 if (!v.is_str && !sel.is_str && (v.num == sel.num)) {
-                    /* execute the chosen case body */
+                    /* ejecutar el cuerpo del case */
                     exec(caseptr->right);
 
                     free_val(&v);
@@ -257,7 +256,30 @@ Value eval(ASTNode *n) {
 
 
     case NODE_FUNCALL: {
-        if (strcmp(n->sval, "mid") == 0) {
+
+    if (strcmp(n->sval, "input") == 0) {
+
+        char buffer[256];
+        if (!fgets(buffer, sizeof(buffer), stdin)) {
+            fprintf(stderr, "Aviso: input no recibido.\n");
+            return make_num_val(0);
+        }
+
+        // eliminar newline
+        buffer[strcspn(buffer, "\n")] = 0;
+
+        // validar que es un número
+        char *endptr;
+        long val = strtol(buffer, &endptr, 10);
+
+        if (*endptr != '\0') {
+            fprintf(stderr, "Aviso: input '%s' no es numerico. usando 0.\n", buffer);
+            return make_num_val(0);
+        }
+
+            return make_num_val(val);
+        }
+    if (strcmp(n->sval, "mid") == 0) {
 
             Value s = eval(n->left);
             Value startV = eval(n->right);
@@ -333,7 +355,7 @@ Value eval(ASTNode *n) {
             return make_num_val(res);
         }
 
-        /* numeric operations */
+        /* operaciones numericas */
         long L = a.is_str ? atoi(a.str) : a.num;
         long R = b.is_str ? atoi(b.str) : b.num;
         long r = 0;
@@ -395,8 +417,6 @@ void exec(ASTNode *n) {
         return;
     }
 
-
-
     case NODE_DOWHILE: {
         do {
             exec(n->left);
@@ -431,7 +451,7 @@ void exec(ASTNode *n) {
 
 
     default:
-        fprintf(stderr, "exec: unknown node type %d\n", n->type);
+        fprintf(stderr, "exec: tipo de nodo desconocido %d\n", n->type);
         return;
     }
 }

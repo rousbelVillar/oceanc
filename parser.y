@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdint.h>   /* for intptr_t casts used in actions */
+#include <stdint.h>
 
 #include "ast.h"
 
@@ -31,6 +31,8 @@ ASTNode *program_root = NULL;
 %token MOD
 %token CONST
 %token COMMA
+%token INPUT
+
 
 /* select/case tokens */
 %token SELECT CASE DEFAULT ENDSELECT COLON
@@ -54,7 +56,7 @@ stmtlist:
     ;
 
 caselist:
-      /* empty */        { $$ = NULL; }
+                         { $$ = NULL; }
     | caseitem           { $$ = $1; }
     | caselist caseitem  {
           ASTNode *head = $1;
@@ -96,6 +98,9 @@ stmt:
     |
       SELECT expr LBRACE caselist RBRACE ENDSELECT
           { $$ = make_select($2, $4); }
+    | INPUT LPAREN RPAREN SEMI
+          { $$ = make_funcall("input", NULL, NULL, NULL); }
+
     ;
 
 expr:
@@ -110,6 +115,9 @@ expr:
           { $$ = make_funcall($1, $3, $5, NULL); }
     | IDENT LPAREN expr COMMA expr COMMA expr RPAREN
           { $$ = make_funcall($1, $3, $5, $7); }
+    | INPUT LPAREN RPAREN
+          { $$ = make_funcall("input", NULL, NULL, NULL); }
+
 
     | expr PLUS expr         { $$ = make_binop('+', $1, $3); }
     | expr MINUS expr        { $$ = make_binop('-', $1, $3); }

@@ -15,6 +15,8 @@
 "case"              { return CASE; }
 "default"           { return DEFAULT; }
 "endselect"         { return ENDSELECT; }
+"input"             { return INPUT; }
+
 
 
 "{"                 { return LBRACE; }
