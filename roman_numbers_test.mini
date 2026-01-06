@@ -5,7 +5,7 @@ var t = "";
 var s = "IVXLCDM";
 
 
-print "Ingrese un número en decimal:";
+print "Enter a decimal number:";
 n = input();
 
 do {
@@ -35,4 +35,4 @@ do {
    i = i + 2;
 } while (n > 0);
 
-print "Numero romano:" + t;
+print "Romain number:" + t;

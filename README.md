@@ -1,47 +1,114 @@
-# Mini-compilador proyecto final
+# Ocean Compiler Project
 
-Este proyecto es un **compilador/intérprete simple** construido con **Flex** y **Bison**, capaz de ejecutar un pequeño lenguaje tipo script que incluye variables, estructuras de control, funciones nativas (`print`, `mid`, etc.) y manejo de cadenas.  
-Incluye también un ejemplo para convertir números enteros a números romanos.
+A **simple compiler/interpreter** built with **Flex** and **Bison**. It executes a small script‑like language featuring variables, control structures, native functions (`print`, `mid`, etc.), and string handling.
+
+The project also includes an example program that converts **integers to Roman numerals**.
 
 ---
 
-## Requisitos del sistema
+## Features
 
-Para compilar y ejecutar este proyecto necesitas:
+* Lexical analysis with **Flex**
+* Syntax parsing with **Bison**
+* Simple AST-based execution
+* Variables and expressions
+* Control structures (conditionals / loops)
+* Built‑in functions
+* String manipulation
+* Example script: **Integer → Roman numeral conversion**
 
-### **Software obligatorio**
-- **GCC** (o cualquier compilador C compatible)
-- **Flex** (generador de analizadores léxicos)
-- **Bison** (generador de analizadores sintácticos)
+---
 
-### **Sistemas operativos compatibles**
-- Linux (Ubuntu, Fedora, Arch…)
-- macOS
-- Windows mediante:
-    - WSL (Windows Subsystem for Linux) — recomendado
-    - MSYS2 / Cygwin
+## System Requirements
 
-### Verificar herramientas
-Puedes comprobar que todo está instalado ejecutando:
+### Required Software
+
+* **GCC** (or any compatible C compiler)
+* **Flex** — lexical analyzer generator
+* **Bison** — parser generator
+* **Make** (optional, but recommended)
+
+### Supported Operating Systems
+
+* Linux (Ubuntu, Fedora, Arch, etc.)
+* macOS
+* Windows via:
+
+  * **WSL (Windows Subsystem for Linux)** — recommended
+  * **MSYS2** or **Cygwin**
+
+---
+
+## Verify Installation
+
+Ensure all required tools are installed:
 
 ```bash
 gcc --version
 flex --version
 bison --version
 make --version
+```
 
-##  Instrucciones rápidas (versión mini, sin *make*)
-###  Compilar manualmente
-Asegúrate de tener instalado **gcc**, **flex** y **bison**.
+---
 
-## En la linea de comandos
+## Project Structure
+
+```text
+.
+├── scanner.l        # Flex lexer definition
+├── parser.y         # Bison grammar
+├── ast.c / ast.h    # Abstract Syntax Tree implementation
+├── main.c           # Program entry point
+├── numeros_romanos.mini  # Example script
+└── README.md
+```
+
+---
+
+## Quick Start (Without Make)
+
+### 1. Generate the Lexer and Parser
+
+```bash
 flex scanner.l
 bison -d parser.y
+```
+
+### 2. Compile
+
+```bash
 gcc -o mini main.c ast.c parser.tab.c lex.yy.c
+```
 
-####### Ejecutar el compilador con los numeros romanos #########
+### 3. Run the Compiler / Interpreter
+
+Run the Roman numerals example:
+
+```bash
 ./mini numeros_romanos.mini
+```
 
-###### Remover los archivos generados #######
-./mini numeros_romanos.mini
+---
 
+## Cleaning Generated Files
+
+To remove generated and compiled files:
+
+```bash
+rm -f mini lex.yy.c parser.tab.c parser.tab.h
+```
+
+---
+
+## Notes
+
+* This project is intended for **educational purposes**.
+* The language syntax is minimal and designed to demonstrate how a compiler/interpreter works internally.
+* Easily extendable with new grammar rules or native functions.
+
+---
+
+## License
+
+This project is provided for academic and learning use. Add a license file if you plan to distribute or modify it publicly.

@@ -6,7 +6,7 @@
 #include "ast.h"
 
 /* ============================================================
-   Esta seccion se encarga de majar los valores de las variables
+   Variable managment
    ============================================================ */
 
 static Value make_num_val(long v) {
@@ -34,7 +34,7 @@ static void free_val(Value *v) {
 }
 
 /* ============================================================
-   almacenamiento de variables simples
+   Simple variable storage
    ============================================================ */
 
 static int   var_defined[256] = {0};
@@ -87,7 +87,7 @@ static void set_var_value(const char *name, Value v) {
 }
 
 /* ============================================================
-   Constructores AST
+    AST Constructors
    ============================================================ */
 
 static ASTNode *new_node(NodeType t) {
@@ -227,12 +227,12 @@ Value eval(ASTNode *n) {
 
         while (caseptr) {
             if (caseptr->type == NODE_CASE) {
-                /* evaluar case para que coincida con el valor */
+                /* Evaluate case */
                 Value v = eval(caseptr->left);
 
-                    /* igualdad de los valores numericos*/
+                    /* Equality of umeric values */
                 if (!v.is_str && !sel.is_str && (v.num == sel.num)) {
-                    /* ejecutar el cuerpo del case */
+                    /* Execute case body */
                     exec(caseptr->right);
 
                     free_val(&v);
@@ -261,19 +261,19 @@ Value eval(ASTNode *n) {
 
         char buffer[256];
         if (!fgets(buffer, sizeof(buffer), stdin)) {
-            fprintf(stderr, "Aviso: input no recibido.\n");
+            fprintf(stderr, "Warning: No input received.\n");
             return make_num_val(0);
         }
 
-        // eliminar newline
+        // erase newline
         buffer[strcspn(buffer, "\n")] = 0;
 
-        // validar que es un número
+        // validate that the value is a number
         char *endptr;
         long val = strtol(buffer, &endptr, 10);
 
         if (*endptr != '\0') {
-            fprintf(stderr, "Aviso: input '%s' no es numerico. usando 0.\n", buffer);
+            fprintf(stderr, "Warning: input '%s' is not numeric. using 0.\n", buffer);
             return make_num_val(0);
         }
 
@@ -451,7 +451,7 @@ void exec(ASTNode *n) {
 
 
     default:
-        fprintf(stderr, "exec: tipo de nodo desconocido %d\n", n->type);
+        fprintf(stderr, "exec: unknown node type. %d\n", n->type);
         return;
     }
 }
